@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model tenant_user_counters {
+  tenant_id     String        @db.Uuid
+  papel         papel_usuario
+  ultimo_numero BigInt        @default(0)
+  tenants       tenants       @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_counter_tenant")
+
+  @@id([tenant_id, papel])
+}
+
+model tenants {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  codigo               String                 @unique @db.VarChar(20)
+  nome_empresa         String                 @db.VarChar(150)
+  documento            String                 @unique @db.VarChar(18)
+  criado_em            DateTime               @default(now()) @db.Timestamptz(6)
+  clientes             clientes[]
+  tenant_user_counters tenant_user_counters[]
+  usuarios             usuarios[]
+}
+
+model usuarios {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id      String        @db.Uuid
+  nome           String        @db.VarChar(150)
+  email          String        @db.VarChar(255)
+  senha_hash     String
+  papel          papel_usuario
+  criado_em      DateTime      @default(now()) @db.Timestamptz(6)
+  codigo_usuario String        @db.VarChar(20)
+  sessoes        sessoes[]
+  tenants        tenants       @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_usuario_tenant")
+
+  @@unique([tenant_id, codigo_usuario], map: "uq_usuario_codigo_tenant")
+  @@unique([tenant_id, email], map: "uq_usuario_email_tenant")
+}
+
+model sessoes {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id  String    @db.Uuid
+  token_hash  String    @unique
+  criado_em   DateTime  @default(now()) @db.Timestamptz(6)
+  expira_em   DateTime  @db.Timestamptz(6)
+  revogada_em DateTime? @db.Timestamptz(6)
+  usuarios    usuarios  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sessao_usuario")
+}
+
+model clientes {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id      String   @db.Uuid
+  codigo_cliente String   @db.VarChar(20)
+  nome           String   @db.VarChar(150)
+  telefone       String?  @db.VarChar(20)
+  criado_em      DateTime @default(now()) @db.Timestamptz(6)
+  tenants        tenants  @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_cliente_tenant")
+
+  @@unique([tenant_id, codigo_cliente], map: "uq_cliente_codigo_tenant")
+}
+
+enum papel_usuario {
+  dono
+  funcionario
+  cliente
+}
