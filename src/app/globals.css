@@ -1,26 +1,704 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  color: #211c19;
+  background: #f5f0e9;
+}
+
+/* ================================= */
+/* PÁGINA */
+/* ================================= */
+
+.login-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(185, 129, 85, 0.2),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(101, 72, 60, 0.16),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f8f3ed 0%,
+      #f5f0e9 45%,
+      #eee4da 100%
+    );
+}
+
+/* MANCHA SUPERIOR */
+
+.login-page::before {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  top: -170px;
+  right: -130px;
+
+  border-radius: 50%;
+
+  background: rgba(185, 129, 85, 0.13);
+
+  filter: blur(35px);
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+/* MANCHA INFERIOR */
+
+.login-page::after {
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  left: -220px;
+  bottom: -250px;
+
+  border-radius: 50%;
+
+  background: rgba(58, 41, 35, 0.09);
+
+  filter: blur(40px);
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+/* ================================= */
+/* CARD */
+/* ================================= */
+
+.login-card {
+  position: relative;
+  overflow: visible;
+
+  z-index: 2;
+
+  width: 100%;
+  max-width: 420px;
+
+  padding: 36px;
+
+  background: rgba(252, 250, 247, 0.96);
+
+  border: 1px solid rgba(228, 216, 206, 0.9);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 24px 70px rgba(58, 41, 35, 0.13),
+    0 4px 15px rgba(58, 41, 35, 0.05);
+
+  backdrop-filter: blur(8px);
+
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+
+  animation: cardLoad 0.7s ease-out both;
+}
+
+/* BRILHO AO PASSAR O MOUSE */
+
+.login-card:hover {
+  border-color: rgba(185, 129, 85, 0.45);
+
+  box-shadow:
+    0 30px 90px rgba(58, 41, 35, 0.18),
+    0 10px 35px rgba(185, 129, 85, 0.12),
+    0 0 0 1px rgba(185, 129, 85, 0.08);
+
+  transform: translateY(-2px);
+}
+
+/* ================================= */
+/* TESOURA DO CANTO */
+/* ================================= */
+
+.login-card::after {
+  content: "✂";
+
+  position: absolute;
+
+  left: -20px;
+  bottom: -18px;
+
+  font-size: 34px;
+
+  color: #65483c;
+
+  transform: rotate(-25deg);
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+/* ================================= */
+/* LOGO */
+/* ================================= */
+
+.login-brand-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 18px;
+
+  animation: logoLoad 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.1s;
+}
+
+.login-brand-logo img {
+  display: block;
+
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ================================= */
+/* FORMULÁRIO */
+/* ================================= */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.field label {
+  color: #3a2923;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ================================= */
+/* INPUT */
+/* ================================= */
+
+.input-wrap {
+  position: relative;
+
+  width: 100%;
+}
+
+.field input {
+  width: 100%;
+
+  padding: 14px 44px 14px 42px;
+
+  border: 1px solid #d9ccc2;
+  border-radius: 10px;
+
+  background: #fcfaf7;
+
+  color: #211c19;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+
+.field input:focus {
+  border-color: #b98155;
+
+  background: #ffffff;
+
+  box-shadow: 0 0 0 3px rgba(185, 129, 85, 0.12);
+}
+
+.field input::placeholder {
+  color: #a99c95;
+}
+
+/* ================================= */
+/* ÍCONES */
+/* ================================= */
+
+.input-icon {
+  position: absolute;
+
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #9b8173;
+
+  pointer-events: none;
+
+  z-index: 2;
+
+  transition: color 0.2s;
+}
+
+.input-wrap:focus-within .input-icon {
+  color: #b98155;
+}
+
+/* ================================= */
+/* OLHINHO DA SENHA */
+/* ================================= */
+
+.password-toggle {
+  position: absolute;
+
+  right: 10px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 32px;
+  height: 32px;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #9b8173;
+
+  cursor: pointer;
+
+  box-shadow: none;
+
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+
+.password-toggle:hover {
+  background: rgba(185, 129, 85, 0.1);
+
+  color: #65483c;
+}
+
+/* ================================= */
+/* BOTÃO ENTRAR */
+/* ================================= */
+
+.login-button {
+  width: 100%;
+
+  margin-top: 4px;
+
+  padding: 14px 16px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: #3a2923;
+
+  color: #fcfaf7;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.login-button:hover {
+  background: #65483c;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 8px 18px rgba(58, 41, 35, 0.18);
+}
+
+.login-button:active {
+  transform: translateY(1px);
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+/* ================================= */
+/* ERRO */
+/* ================================= */
+
+.login-error {
+  padding: 11px 12px;
+
+  border: 1px solid #e9b9a8;
+  border-radius: 8px;
+
+  background: #fff1ec;
+
+  color: #9a3e2d;
+
+  font-size: 13px;
+}
+
+/* ================================= */
+/* RODAPÉ */
+/* ================================= */
+
+.page-footer {
+  position: absolute;
+
+  left: 50%;
+  bottom: 18px;
+
+  transform: translateX(-50%);
+
+  z-index: 2;
+
+  color: rgba(101, 72, 60, 0.65);
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 1.2px;
+
+  white-space: nowrap;
+
+  user-select: none;
+}
+
+/* ================================= */
+/* TESOURAS DO FUNDO */
+/* ================================= */
+
+.scissors-background {
+  position: fixed;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+.scissor {
+  position: absolute;
+
+  color: #b98155;
+
+  font-size: 28px;
+
+  opacity: 0.45;
+
+  filter: drop-shadow(
+    0 3px 3px rgba(58, 41, 35, 0.1)
+  );
+}
+
+/* ================================= */
+/* RASTRO TRACEJADO */
+/* ================================= */
+
+.scissor::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  right: 24px;
+
+  width: 130px;
+  height: 0;
+
+  border-top: 2px dashed rgba(101, 72, 60, 0.2);
+
+  transform: translateY(-50%);
+
+  opacity: 0.8;
+}
+
+/* ================================= */
+/* TESOURAS VINDO DE CIMA */
+/* ================================= */
+
+.scissor-top {
+  top: -180px;
+
+  animation-name: scissorsFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 10s;
+}
+
+/* ================================= */
+/* TESOURAS VINDO DE BAIXO */
+/* ================================= */
+
+.scissor-bottom {
+  bottom: -180px;
+
+  animation-name: scissorsRise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 11s;
+}
+
+/* ================================= */
+/* POSIÇÕES E VELOCIDADES */
+/* ================================= */
+
+.scissor:nth-child(1) {
+  left: 7%;
+  animation-duration: 10.5s;
+  animation-delay: -3.4s;
+}
+
+.scissor:nth-child(2) {
+  left: 24%;
+  animation-duration: 12.2s;
+  animation-delay: -8.1s;
+}
+
+.scissor:nth-child(3) {
+  left: 46%;
+  animation-duration: 9.8s;
+  animation-delay: -1.9s;
+}
+
+.scissor:nth-child(4) {
+  left: 72%;
+  animation-duration: 11.4s;
+  animation-delay: -6.7s;
+}
+
+.scissor:nth-child(5) {
+  left: 91%;
+  animation-duration: 13s;
+  animation-delay: -10.2s;
+}
+
+.scissor:nth-child(6) {
+  left: 14%;
+  animation-duration: 12.6s;
+  animation-delay: -5.2s;
+}
+
+.scissor:nth-child(7) {
+  left: 35%;
+  animation-duration: 10.2s;
+  animation-delay: -8.6s;
+}
+
+.scissor:nth-child(8) {
+  left: 58%;
+  animation-duration: 13.3s;
+  animation-delay: -2.8s;
+}
+
+.scissor:nth-child(9) {
+  left: 79%;
+  animation-duration: 11.1s;
+  animation-delay: -7.3s;
+}
+
+.scissor:nth-child(10) {
+  left: 95%;
+  animation-duration: 12s;
+  animation-delay: -4.1s;
+}
+
+/* ================================= */
+/* ANIMAÇÃO: TESOURAS DESCENDO */
+/* ================================= */
+
+@keyframes scissorsFall {
+  from {
+    transform: translateY(0) rotate(-90deg);
+  }
+
+  to {
+    transform:
+      translateY(calc(100vh + 360px))
+      rotate(-90deg);
+  }
+}
+
+/* ================================= */
+/* ANIMAÇÃO: TESOURAS SUBINDO */
+/* ================================= */
+
+@keyframes scissorsRise {
+  from {
+    transform: translateY(0) rotate(-90deg);
+  }
+
+  to {
+    transform:
+      translateY(calc(-100vh - 360px))
+      rotate(-90deg);
+  }
+}
+
+/* ================================= */
+/* ANIMAÇÃO DE ENTRADA DO CARD */
+/* ================================= */
+
+@keyframes cardLoad {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* ================================= */
+/* ANIMAÇÃO DA LOGO */
+/* ================================= */
+
+@keyframes logoLoad {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-12px)
+      scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* ================================= */
+/* CELULAR */
+/* ================================= */
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 16px;
+    padding-bottom: 55px;
+  }
+
+  .login-card {
+    padding: 28px 22px;
+
+    border-radius: 18px;
+  }
+
+  .login-brand-logo img {
+    width: 280px;
+  }
+
+  .login-card::after {
+    left: -12px;
+    bottom: -16px;
+
+    font-size: 30px;
+  }
+
+  .scissor {
+    font-size: 23px;
+  }
+
+  .scissor::before {
+    width: 90px;
+  }
+
+  .page-footer {
+    bottom: 14px;
+
+    font-size: 10px;
+  }
+}
+
+/* ================================= */
+/* ACESSIBILIDADE */
+/* ================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .login-card,
+  .login-brand-logo {
+    animation: none;
+  }
+
+  .login-card {
+    transition: none;
+  }
 }
